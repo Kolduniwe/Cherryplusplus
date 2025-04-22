@@ -1,0 +1,35 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+int main() {
+    int size = 12; // You can choose any number of elements
+    double* array = new double[size]; // Allocate dynamic memory for the array
+
+    srand(time(0)); // Seed the random number generator
+
+    std::cout << "Array elements: ";
+    for (int i = 0; i < size; ++i) {
+        array[i] = (double(rand()) / RAND_MAX) * 4 - 2; // Generate random numbers between -2 and 2
+        std::cout << array[i] << " ";
+    }
+    std::cout << std::endl;
+
+    int positiveCount = 0; // Counter for positive numbers
+    int negativeCount = 0; // Counter for negative numbers
+    for (int i = 0; i < size; ++i) {
+        if (array[i] > 0) {
+            positiveCount++;
+        } else if (array[i] < 0) {
+            negativeCount++;
+        }
+    }
+
+    std::cout << "Positive numbers count: " << positiveCount << std::endl;
+    std::cout << "Negative numbers count: " << negativeCount << std::endl;
+
+    delete[] array; // Release the allocated memory
+    array = nullptr; // Set the pointer to null to avoid dangling pointers
+
+    return 0;
+}

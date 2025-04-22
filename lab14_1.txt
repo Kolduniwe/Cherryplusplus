@@ -1,0 +1,65 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+int main() {
+    int rows = 3;
+    int cols = 3;
+
+    // Виділяємо пам'ять під двовимірний динамічний масив
+    int** matrix = new int*[rows];
+    for (int i = 0; i < rows; ++i) {
+        matrix[i] = new int[cols];
+    }
+
+    // Заповнюємо масив випадковими числами (наприклад, від 0 до 9)
+    srand(time(0));
+    std::cout << "Двовимірний масив:" << std::endl;
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            matrix[i][j] = rand() % 10;
+            std::cout << matrix[i][j] << "\t";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+
+    // Виводимо елементи головної діагоналі
+    std::cout << "Головна діагональ: ";
+    for (int i = 0; i < rows; ++i) {
+        std::cout << matrix[i][i] << " ";
+    }
+    std::cout << std::endl;
+
+    // Виводимо елементи побічної діагоналі
+    std::cout << "Побічна діагональ: ";
+    for (int i = 0; i < rows; ++i) {
+        std::cout << matrix[i][cols - 1 - i] << " ";
+    }
+    std::cout << std::endl;
+
+    // Рахуємо кількість парних та непарних елементів
+    int evenCount = 0;
+    int oddCount = 0;
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            if (matrix[i][j] % 2 == 0) {
+                evenCount++;
+            } else {
+                oddCount++;
+            }
+        }
+    }
+
+    std::cout << "Кількість парних елементів: " << evenCount << std::endl;
+    std::cout << "Кількість непарних елементів: " << oddCount << std::endl;
+
+    // Звільняємо виділену пам'ять
+    for (int i = 0; i < rows; ++i) {
+        delete[] matrix[i];
+    }
+    delete[] matrix;
+    matrix = nullptr;
+
+    return 0;
+}
