@@ -1,0 +1,56 @@
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+
+using namespace std;
+
+const int ROWS = 4;
+const int COLS = 4;
+
+int main() {
+    srand(time(0));
+    
+    int arr[ROWS][COLS];
+
+    // Заповнення масиву випадковими числами (від 0 до 99)
+    int* ptr = &arr[0][0];
+    for (int i = 0; i < ROWS * COLS; ++i) {
+        *(ptr + i) = rand() % 100;
+    }
+
+    // Виведення масиву
+    cout << "Масив:\n";
+    ptr = &arr[0][0];
+    for (int i = 0; i < ROWS; ++i) {
+        for (int j = 0; j < COLS; ++j) {
+            cout << *(ptr + i * COLS + j) << "\t";
+        }
+        cout << endl;
+    }
+
+    // Головна діагональ
+    cout << "\nГоловна діагональ: ";
+    for (int i = 0; i < ROWS; ++i) {
+        cout << *(ptr + i * COLS + i) << " ";
+    }
+
+    // Побічна діагональ
+    cout << "\nПобічна діагональ: ";
+    for (int i = 0; i < ROWS; ++i) {
+        cout << *(ptr + i * COLS + (COLS - 1 - i)) << " ";
+    }
+
+    // Підрахунок парних та непарних елементів
+    int even = 0, odd = 0;
+    for (int i = 0; i < ROWS * COLS; ++i) {
+        if (*(ptr + i) % 2 == 0)
+            ++even;
+        else
+            ++odd;
+    }
+
+    cout << "\nКількість парних елементів: " << even;
+    cout << "\nКількість непарних елементів: " << odd << endl;
+
+    return 0;
+}
