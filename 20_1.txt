@@ -1,0 +1,33 @@
+#include <iostream>
+using namespace std;
+
+class Square {
+private:
+    int side;
+    int area;
+
+public:
+    // Сетер
+    void set_side(int s) {
+        if (s >= 0) {
+            side = s;
+            area = side * side;
+        }
+    }
+
+    // Публічний метод для друку інформації
+    void print() {
+        cout << "Side: " << side << ", Area: " << area << endl;
+    }
+};
+
+int main() {
+    Square sq;
+    sq.set_side(5);    // коректне значення
+    sq.print();
+
+    sq.set_side(-3);   // некоректне значення — буде проігноровано
+    sq.print();
+
+    return 0;
+}
