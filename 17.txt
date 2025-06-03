@@ -1,0 +1,12 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+bool isPrime(int num) {
+    if (num < 2) return false; // 0 і 1 не є простими числами
+    for (int i = 2; i <= sqrt(num); i++) {
+        if (num % i == 0)
+            return false; // якщо знайшли дільник, число не просте
+    }
+    return true; // якщо не знайшли дільників
+}
