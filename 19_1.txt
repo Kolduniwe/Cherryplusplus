@@ -1,0 +1,52 @@
+#include <iostream>
+#include <string>
+#include <map>
+#include <sstream>
+
+using namespace std;
+
+int main() {
+    string valuesLine;
+    getline(cin, valuesLine);
+
+    string templateLine;
+    getline(cin, templateLine);
+
+    map<string, string> valuesMap;
+
+    // Парсинг пар name=value
+    stringstream ss(valuesLine);
+    string pair;
+    while (getline(ss, pair, ',')) {
+        size_t pos = pair.find('=');
+        if (pos != string::npos) {
+            string key = pair.substr(0, pos);
+            string value = pair.substr(pos + 1);
+            valuesMap[key] = value;
+        }
+    }
+
+    // Обробка шаблону
+    string result;
+    for (size_t i = 0; i < templateLine.length(); ) {
+        if (templateLine[i] == '[') {
+            size_t end = templateLine.find(']', i);
+            if (end != string::npos) {
+                string key = templateLine.substr(i + 1, end - i - 1);
+                if (valuesMap.count(key)) {
+                    result += valuesMap[key];
+                } else {
+                    result += "[" + key + "]";
+                }
+                i = end + 1;
+            } else {
+                result += templateLine[i++];
+            }
+        } else {
+            result += templateLine[i++];
+        }
+    }
+
+    cout << result << "\n";
+    return 0;
+}
