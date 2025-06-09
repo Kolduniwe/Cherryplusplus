@@ -1,0 +1,93 @@
+#include <iostream>
+#include <string>
+#include <sstream>
+using namespace std;
+
+class FlightBooking {
+public:
+    FlightBooking();
+    FlightBooking(int id, int capacity);
+    void printStatus();
+    bool addReservations(int n);
+    bool cancelReservations(int n);
+    int getId(); // Доступ до id
+private:
+    int id;
+    int capacity;
+    int reserved;
+};
+
+// Конструктор "порожнього" рейсу (недійсний)
+FlightBooking::FlightBooking() {
+    id = 0;
+    capacity = 0;
+    reserved = 0;
+}
+
+// Конструктор з параметрами
+FlightBooking::FlightBooking(int id, int capacity) {
+    this->id = id;
+    this->capacity = capacity;
+    this->reserved = 0;
+}
+
+void FlightBooking::printStatus() {
+    double percentage = (double)reserved / capacity * 100;
+    cout << "Flight " << id << " : " << reserved << "/" << capacity
+         << " (" << (int)percentage << "%) seats reserved" << endl;
+}
+
+bool FlightBooking::addReservations(int n) {
+    int maxReservations = capacity * 1.05;
+    if (reserved + n <= maxReservations) {
+        reserved += n;
+        return true;
+    }
+    return false;
+}
+
+bool FlightBooking::cancelReservations(int n) {
+    if (reserved - n >= 0) {
+        reserved -= n;
+        return true;
+    }
+    return false;
+}
+
+int FlightBooking::getId() {
+    return id;
+}
+
+int main() {
+    const int MAX_FLIGHTS = 10;
+    FlightBooking flights[MAX_FLIGHTS]; // Масив з 10 рейсів
+
+    string command;
+    while (true) {
+        cout << "Enter command: ";
+        getline(cin, command);
+
+        if (command == "quit") break;
+
+        stringstream ss(command);
+        string action;
+        ss >> action;
+
+        if (action == "create") {
+            int id, cap;
+            ss >> id >> cap;
+            bool exists = false;
+            int freeIndex = -1;
+
+            for (int i = 0; i < MAX_FLIGHTS; ++i) {
+                if (flights[i].getId() == id) {
+                    exists = true;
+                    break;
+                }
+                if (flights[i].getId() == 0 && freeIndex == -1) {
+                    freeIndex = i;
+                }
+            }
+
+            if (exists || freeIndex == -1 || id == 0 || cap <= 0) {
+                cout << "Cannot perform this operation" << en

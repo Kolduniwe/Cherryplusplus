@@ -1,0 +1,105 @@
+#include <iostream>
+#include <string>
+#include <sstream>
+using namespace std;
+
+class FlightBooking {
+public:
+    FlightBooking(int id, int capacity, int reserved);
+    void printStatus();
+    bool addReservations(int n);
+    bool cancelReservations(int n);
+
+private:
+    int id;
+    int capacity;
+    int reserved;
+};
+
+// Конструктор — обмежує значення
+FlightBooking::FlightBooking(int id, int capacity, int reserved) {
+    this->id = id;
+    this->capacity = capacity;
+
+    int maxReservations = capacity * 1.05;
+    if (reserved < 0)
+        this->reserved = 0;
+    else if (reserved > maxReservations)
+        this->reserved = maxReservations;
+    else
+        this->reserved = reserved;
+}
+
+// Виведення статусу бронювання
+void FlightBooking::printStatus() {
+    double percentage = (double)reserved / capacity * 100;
+    cout << "Flight " << id << " : " << reserved << "/" << capacity 
+         << " (" << (int)percentage << "%) seats reserved" << endl;
+}
+
+// Додавання бронювань
+bool FlightBooking::addReservations(int n) {
+    int maxReservations = capacity * 1.05;
+    if (reserved + n <= maxReservations) {
+        reserved += n;
+        return true;
+    }
+    return false;
+}
+
+// Скасування бронювань
+bool FlightBooking::cancelReservations(int n) {
+    if (reserved - n >= 0) {
+        reserved -= n;
+        return true;
+    }
+    return false;
+}
+
+int main() {
+    int reserved, capacity;
+
+    cout << "Provide flight capacity: ";
+    cin >> capacity;
+
+    cout << "Provide number of reserved seats: ";
+    cin >> reserved;
+
+    FlightBooking booking(1, capacity, reserved);
+    booking.printStatus();
+
+    string command;
+    cin.ignore(); // очистити буфер після cin
+
+    while (true) {
+        cout << "Enter command (add n, cancel n, quit): ";
+        getline(cin, command);
+
+        if (command == "quit")
+            break;
+
+        stringstream ss(command);
+        string action;
+        int value;
+        ss >> action >> value;
+
+        bool success = false;
+
+        if (action == "add") {
+            success = booking.addReservations(value);
+        } else if (action == "cancel") {
+            success = booking.cancelReservations(value);
+        } else {
+            cout << "Unknown command" << endl;
+            continue;
+        }
+
+        if (!success) {
+            cout << "Cannot perform this operation" << endl;
+        }
+
+        booking.printStatus();
+    }
+
+    return 0;
+}
